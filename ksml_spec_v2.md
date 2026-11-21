@@ -1,6 +1,6 @@
 # Kirino Shader Meta Language (KSML)
 
-> 2026 Jul
+> Jul 2026
 
 KSML is a runtime-agnostic engineering layer for GLSL. Unlike engine-specific shader systems, 
 it's non-invasive and also provides modules, namespaces, and first-class IDE support.

@@ -1,6 +1,6 @@
 # Kirino Shader Meta Language (KSML)
 
-> 2026 Jan
+> Jan 2026
 
 Goals:
 - Composable shader code: reuse of utility methods and structs
