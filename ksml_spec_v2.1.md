@@ -715,3 +715,67 @@ In this example:
 - The shader does not need to import `math` separately because it does not call `math` functions directly.
 
 The example assumes that a valid `color` module is supplied as part of the compilation unit.
+
+## 8. Compiler Output and Source Mapping
+
+### 8.1. GLSL Assembly
+
+The compiler must produce a single GLSL shader source from the input shader and its selected KSML modules.
+
+The generated source must follow this order:
+1. GLSL `#version` and extension directives.
+2. Source file ID mapping.
+3. Function prototypes from all selected modules.
+4. KSML module function definitions.
+5. Generated exported function wrappers.
+6. Original GLSL shader declarations.
+
+Function prototypes must be emitted before module definitions to support cross-module calls and cyclic dependencies.
+
+### 8.2. Source Mapping
+
+The compiler must preserve original source locations using GLSL `#line` directives.
+
+Each source file must be assigned a unique integer source ID within a compilation.
+
+The compiler must insert:
+
+```glsl
+#line <original_line> <source_id>
+```
+
+before each KSML function definition and each original GLSL top-level declaration. 
+Generated exported wrappers should also retain the source location of their corresponding function declarations.
+
+A source ID mapping table must be included in the generated GLSL as a comment.
+
+Example:
+```glsl
+/* File Mapping:
+ * math.ksml <-> 0
+ * main.frag <-> 1
+ */
+
+#line 12 0
+float ksml_4_math_square(float x) {
+    return x * x;
+}
+
+#line 6 1
+void main() {
+    // ...
+}
+```
+
+The `#line` directives allow downstream GLSL compilers to report errors using the original source line numbers 
+and source IDs rather than the assembled shader's physical line numbers.
+
+### 8.3. Compilation Diagnostics
+
+KSML parsing and semantic diagnostics must reference the original source file and location.
+
+Generated GLSL source IDs must remain consistent throughout a compilation so downstream shader diagnostics 
+can be mapped back to their corresponding files.
+
+The KSML compiler is responsible for source generation and KSML diagnostics. 
+Actual OpenGL shader compilation and driver error reporting remain outside its scope.
