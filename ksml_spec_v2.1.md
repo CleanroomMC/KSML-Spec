@@ -334,7 +334,7 @@ Rules:
 - For versions 150 and later, an omitted profile defaults to `core`.
 - `compat` and `compatibility` are equivalent in KSML.
 - The compiler must analyze version compatibility between the module and its dependencies.
-- A module-level version mismatch must produce a `NOTICE`, as defined in Section 5.
+- A module-level version mismatch must produce a `NOTICE`, as defined in Section 6.
 
 ### 3.7. `@gl_requires`
 
@@ -362,7 +362,7 @@ Rules:
 - A code block may have at most one `@gl_requires` annotation.
 - The annotation may specify a higher or lower version requirement than the module.
 - Profile resolution follows the same rules as `@gl_version`.
-- A function-level version mismatch at a call site must produce a `WARNING`, as defined in Section 5.
+- A function-level version mismatch at a call site must produce a `WARNING`, as defined in Section 6.
 - An `@gl_requires` annotation does not modify the module's baseline `@gl_version`.
 
 ## 4. Code Blocks and Function Visibility
@@ -769,6 +769,16 @@ void main() {
 
 The `#line` directives allow downstream GLSL compilers to report errors using the original source line numbers 
 and source IDs rather than the assembled shader's physical line numbers.
+
+> Note:<br>
+> There is a GLSL `#line` version difference
+> 
+> | GLSL Version | Line Number After `#line N` | Semantics |
+> |--------------|-----------------------------|-----------|
+> | 110 - 150    | `N + 1`                     | Legacy    |
+> | 330 - 460    | `N`                         | Modern    |
+
+The compiler must provide a `Legacy / Modern` option in its compile configuration to address the discrepancies.
 
 ### 8.3. Compilation Diagnostics
 
