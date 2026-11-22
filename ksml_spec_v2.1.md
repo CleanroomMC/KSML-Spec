@@ -780,6 +780,18 @@ and source IDs rather than the assembled shader's physical line numbers.
 
 The compiler must provide a `Legacy / Modern` option in its compile configuration to address the discrepancies.
 
+Example (Target line = 100):<br>
+`Legacy mode`
+```glsl
+#line 99
+int a;
+```
+`Modern mode`
+```glsl
+#line 100
+int a;
+```
+
 ### 8.3. Compilation Diagnostics
 
 KSML parsing and semantic diagnostics must reference the original source file and location.
